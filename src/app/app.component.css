@@ -1,0 +1,9 @@
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.login {
+  width: 40vw;
+  height: 20vh;
+}

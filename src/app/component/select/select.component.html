@@ -1,0 +1,18 @@
+<label>Choisissez :</label>
+<select #selectElement (change)="selected.set(selectElement.value)" id="field">
+    <option [defaultSelected]="" value=""></option>
+    @for (data of datas; track $index) {
+        <option [id]="data.index" [value]="data.url">
+            {{ data.name}}
+        </option>
+    }
+</select>
+
+@if (selected() != "") {
+    <div>
+        <select name="" id="secondField">
+            <!-- @for (item of items; track $index) {} -->
+            <option value="default"> DEFAULT</option>
+        </select>
+    </div>
+}

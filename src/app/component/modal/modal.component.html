@@ -1,0 +1,12 @@
+<div class="backdrop" *ngIf="isOpen" (click)="close()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <header>
+        <h2>{{ title }}</h2>
+        <button class="close-btn" (click)="close()">×</button>
+      </header>
+      <section class="content">
+        <ng-content></ng-content>
+      </section>
+    </div>
+  </div>
+  

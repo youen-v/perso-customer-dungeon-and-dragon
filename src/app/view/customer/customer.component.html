@@ -1,1 +1,23 @@
-<p>customer works!</p>
+<div class="container">
+    <div class="case classes" id="{{routesApi[3].id}}" (click)="openModal()"></div>
+    <app-modal
+    [isOpen]="showModal"
+    title="Mon dialogue"
+    (closed)="onModalClosed()"
+    >
+        <app-select [dataSend]="routesApi[3].res"></app-select>
+        <p>Contenu personnalisé à l’intérieur de la modal.</p>
+        <button (click)="onModalClosed()">Fermer</button>
+    </app-modal>
+
+    <div class="case" id="{{routesApi[6].id}}" (click)="openModal()"></div>
+    <app-modal
+    [isOpen]="showModal"
+    title="Mon dialogue"
+    (closed)="onModalClosed()"
+    >
+        <app-select [dataSend]="routesApi[6].res"></app-select>
+        <p>Contenu personnalisé à l’intérieur de la modal.</p>
+        <button (click)="onModalClosed()">Fermer</button>
+    </app-modal>
+</div>

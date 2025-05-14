@@ -1,0 +1,22 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.case {
+  background-color: brown;
+  margin: 10px;
+  border-radius: 10px;
+  border: 0.5px solid #5c5c5c;
+}
+
+.classes {
+  width: 20vw;
+  height: 50vh;
+  grid-column: 3;
+  grid-row: 2 / 5;
+  justify-self: center;
+}

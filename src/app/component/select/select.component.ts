@@ -10,7 +10,7 @@ import { baseUrl } from '../../global/baseUrl';
   templateUrl: './select.component.html',
 })
 export class SelectComponent {
-  @Input() set dataSend(value: string) {
+  @Input() set dataSend(value: string | undefined) {
     if (value && value.trim() !== '') {
       try {
         const parsed = JSON.parse(value);

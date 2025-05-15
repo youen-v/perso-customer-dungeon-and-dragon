@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 export class ModalComponent {
   @Input() title = '';
   @Input() isOpen = false;
+  @Input() selectedRoute: { id: string; url: string; res: string } | null =
+    null;
   @Output() closed = new EventEmitter<void>();
 
   close() {

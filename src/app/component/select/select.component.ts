@@ -1,7 +1,15 @@
-import { Component, effect, Input, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  EventEmitter,
+  Input,
+  Output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { baseUrl } from '../../global/baseUrl';
+import { Races } from '../../utils/Races';
 
 @Component({
   selector: 'app-select',
@@ -21,7 +29,8 @@ export class SelectComponent {
     }
   }
   datas: { index: string; name: string; url: string }[] = [];
-  submenu: { index: string; name: string; url: string }[] = [];
+
+  @Output() categoriesPayload = new EventEmitter<Races>();
 
   readonly selected = signal('');
 
@@ -31,7 +40,9 @@ export class SelectComponent {
       if (val) {
         fetch(baseUrl + val)
           .then((res) => res.json())
-          .then((result) => console.log(result))
+          .then((result) => {
+            this.categoriesPayload.emit(result);
+          })
           .catch((err) => console.log(err));
       }
     });

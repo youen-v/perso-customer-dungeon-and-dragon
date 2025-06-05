@@ -1,16 +1,50 @@
-<div class="container">
-    @for (route of routesApi; track $index) {
-        <div class="case" id="{{route.id}}" (click)="openModal(route)"></div> 
-    }
+<section class="container">
+    <div class="fond-fiche-personnage">
+        @for (route of routesApi; track $index) {
+            <div class="case" id="{{route.id}}" (click)="openModal(route)">
+                <img 
+                    [id]="'image-'+route.id" [src]='"/assets/"+ route.id+ "/" + route.id + "-" + route.image + ".png"' 
+                    [alt]="`Cliquez ici pour ajouter votre ${route.id}`" 
+                    [title]="`Cliquez ici pour ajouter votre ${route.id}`"
+                >
+            </div> 
+            @if (route.id == "races") {
+                <div id="nomPersonnage">
+                    @if(!editingName()) {
+                        <p class="display-name" (click)="editName()">
+                          {{ name ? name : 'Votre nom ici' }}
+                        </p>
+                      }
+                    
+                      <!-- Affiche l’input si on est en mode édition -->
+                      @if(editingName()) {
+                        <input
+                          class="edit-input"
+                          type="text"
+                          [(ngModel)]="name"
+                          (blur)="saveName()"
+                          (keydown)="onNameKeydown($event)"
+                          name="name"
+                          autofocus
+                        />
+                      }
+                </div>
+            }
+        }
         <app-modal
         [isOpen]="showModal"
         title="Mon dialogue"
         [selectedRoute]="selectedRoute"
         (closed)="onModalClosed()"
+        (categoriesSelected)="onCategoriesSelected($event)"
         >
-            <app-select [dataSend]="selectedRoute?.res"></app-select>
-            <p>Contenu personnalisé à l’intérieur de la modal.</p>
+            <app-select [dataSend]="selectedRoute.res"></app-select>
             <button (click)="onModalClosed()">Fermer</button>
         </app-modal>
-  
-</div>
+        <section id="fichePersonnage">
+            <app-resume
+                [payloadRaces]="selectedCategories"
+            ></app-resume>
+        </section>
+    </div>
+</section>

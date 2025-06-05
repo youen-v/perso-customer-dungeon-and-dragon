@@ -6,7 +6,13 @@
         <button class="close-btn" (click)="close()">×</button>
       </header>
       <section class="content">
-        <ng-content></ng-content>
+        <app-select
+        [dataSend]="selectedRoute?.res"
+        (categoriesPayload)="onCategories($event)"
+        ></app-select>
+
+       <!-- ici tu peux afficher la race remontée si tu veux en preview -->
+        <pre *ngIf="false">{{ categoriesSelected }}</pre>
       </section>
     </div>
   </div>

@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.background {
+  background-image: url("/assets/fonds/map_full_landscape.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+}
+
+.menu {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+}

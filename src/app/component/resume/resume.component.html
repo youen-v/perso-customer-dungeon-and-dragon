@@ -1,1 +1,136 @@
-<p>resume works!</p>
+<div id="contain-resume">
+  @if (racesData) {
+    <section id="races-resume">
+      <h2>Race</h2>
+      <p>Race : {{ racesData.name }}</p>
+      <p>Speed : {{ racesData.speed }}</p>
+      <p>Alignment : {{ racesData.alignment }}</p>
+      <p>
+        Ability bonuses :
+        @for ( ability of racesData.ability_bonuses; track $index) {
+          <span>{{ `${ability.ability_score.name} ` }}</span>
+        }
+      </p>
+      <p>Languages : 
+        @for ( language of racesData.languages; track $index) {
+          <span>{{ `${language} ` }}</span>
+        }
+      </p>
+      <p>Size : 
+        @if (racesData.size != null) {
+          {{ `${racesData.size} -  ${racesData.size_description}` }}
+        }
+      </p>
+      <p>Subraces : 
+        @for ( subrace of racesData.subraces; track $index) {
+          <span>{{ `${subrace} ` }}</span>
+        }
+      </p>
+      <p>Traits : 
+        @for ( trait of racesData.traits; track $index) {
+          <span>{{ `${trait} ` }}</span>
+        }
+      </p>
+    </section>
+  }
+  @if (classesData) {
+    <section id="classes-resume">
+      <h2>Classe</h2>
+      <p>Hit : {{ classesData.hit_die }} </p>
+      <p>Multi classing: <span>{{ classesData.multi_classing }}</span></p>
+      <p>
+        Proficiencies: 
+        @for (proficiencie of classesData.proficiencies; track $index) {
+          <span>{{ proficiencie }}</span>
+        }
+      </p>
+      <p>
+        Proficiency choices: 
+        @for (proficiency_choice of classesData.proficiency_choices; track $index) {
+          <span>{{ proficiency_choice }}</span>
+        }
+      </p>
+      <p>
+        Saving throws: 
+        @for (saving_throw of classesData.saving_throws; track $index) {
+          <span>{{ saving_throw }}</span>
+        }
+      </p>
+      <p>
+        Starting equipment: 
+        @for (starting_equipment of classesData.starting_equipment; track $index) {
+          <span>{{ starting_equipment }}</span>
+        }
+      </p>
+      <p>
+        Starting equipment options: 
+        @for (starting_equipment_option of classesData.starting_equipment_options; track $index) {
+          <span>{{ starting_equipment_option }}</span>
+        }
+      </p>
+      <p>
+        Starting equipment options: 
+        @for (subclasse of classesData.subclasses; track $index) {
+          <span>{{ subclasse }}</span>
+        }
+      </p>
+    </section>
+  }
+  @if (equipmentData) {
+    <section id="equipment-resume">
+      <h2>Equipment</h2>
+      <p>Name: {{ equipmentData.name }} </p>
+      <p>Equipment category: <span>{{ equipmentData.equipment_category }}</span></p>
+      <p>Category range: {{ equipmentData.category_range }} </p>
+      <p>Range: <span>{{ equipmentData.range }}</span></p>
+      <p>
+        Contents: 
+        @for (content of equipmentData.contents; track $index) {
+          <span>{{ content }}</span>
+        }
+      </p>
+      <p>Cost: {{ equipmentData.cost }} </p>
+      <p>Damage: {{ equipmentData.damage }} </p>
+      <p>
+        Properties: 
+        @for (propertie of equipmentData.properties; track $index) {
+          <span>{{ propertie }}</span>
+        }
+      </p>
+      <p>Two handed damage: <span>{{ equipmentData.two_handed_damage }}</span></p>
+    </section>
+  }
+  @if (skillsData) {
+    <section id="skill-resume">
+      <h2>Skill</h2>
+      <p>Name: {{ skillsData.name }} </p>
+      <p>
+        Description: 
+        @for(desc of skillsData.desc; track $index){
+          {{ desc }} 
+          } 
+      </p>
+      <p>Ability: {{ skillsData.ability_score }}</p>
+    </section>
+  }
+  @if (spellsData) {
+    <section id="skill-resume">
+      <h2>Skill</h2>
+      <p>Name: {{ spellsData.name }} </p>
+      <p>
+        Description: 
+        @for(desc of spellsData.desc; track $index){
+          {{ desc }} 
+          } 
+      </p>
+      <p>Attack type: {{ spellsData.attack_type }}</p>
+      <p>Damage: {{ spellsData.damage }}</p>
+      <p>Range: {{ spellsData.range }}</p>
+      <p>Duration: {{ spellsData.duration }}</p>
+      <p>Ritual: {{ spellsData.ritual? 'Yes' : 'No'}}</p>
+      <p>School: {{ spellsData.school }}</p>
+      <p>Material: {{ spellsData.material }}</p>
+      <p>Concentration: {{ spellsData.concentration }}</p>
+    </section>
+  }
+</div>

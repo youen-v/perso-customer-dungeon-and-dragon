@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SelectComponent } from '../../component/select/select.component';
 import { ModalComponent } from '../../component/modal/modal.component';
 import { ResumeComponent } from '../../component/resume/resume.component';
@@ -6,6 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { signal } from '@angular/core';
 import { baseUrl } from '../../global/baseUrl';
 import { Races } from '../../utils/Races';
+import { Classes } from '../../utils/Classes';
+import { Equipment } from '../../utils/Equipment';
+import { Skills } from '../../utils/Skills';
+import { Spells } from '../../utils/Spells';
 
 @Component({
   selector: 'app-customer',
@@ -16,11 +20,8 @@ import { Races } from '../../utils/Races';
 })
 export class CustomerComponent implements OnInit {
   ngOnInit(): void {
-    for (let index = 0; index < this.routesApi.length; index++) {
-      this.getRoutesApi(index);
-    }
-
     const promises = this.routesApi.map((_, index) => this.getRoutesApi(index));
+
     Promise.all(promises)
       .then(() => {
         this.filterEquipement(this.routesApi[1].res);
@@ -32,21 +33,6 @@ export class CustomerComponent implements OnInit {
 
   name: string = '';
   readonly editingName = signal(false);
-
-  editName() {
-    this.editingName.set(true);
-  }
-
-  saveName() {
-    this.editingName.set(false);
-  }
-
-  onNameKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.saveName();
-      console.log(this.name);
-    }
-  }
   showModal = false;
   selectedRoute: {
     id: string;
@@ -54,7 +40,11 @@ export class CustomerComponent implements OnInit {
     res: string;
     image: string;
   } = { id: '', url: '', res: '', image: '' };
-  selectedCategories: Races | null = null;
+  selectedCategories: Races | Classes | Equipment | Skills | Spells | null =
+    null;
+  selectedStep: Number = 0;
+  selectedClasse: Classes | null = null;
+  filteredSpellsJson = '';
 
   routesApi = [
     { id: 'classes', url: '/api/2014/classes', res: '', image: 'default' },
@@ -108,18 +98,101 @@ export class CustomerComponent implements OnInit {
   ];
   armor: Array<object> = [];
 
-  openModal(route: { id: string; url: string; res: string; image: string }) {
-    this.selectedRoute = route;
-    this.showModal = true;
+  editName() {
+    this.editingName.set(true);
+  }
+
+  saveName() {
+    this.editingName.set(false);
+  }
+
+  onNameKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.saveName();
+      console.log(this.name);
+    }
+  }
+
+  onSelectedStep(step: Number) {
+    this.selectedStep = step;
+  }
+
+  async openModal(
+    route: { id: string; url: string; res: string; image: string },
+    selectedStep: Number
+  ) {
+    switch (selectedStep) {
+      case 0:
+        if (route.id == 'races') {
+          this.selectedRoute = route;
+          this.showModal = true;
+        }
+        break;
+      case 1:
+        if (route.id == 'races' || route.id == 'classes') {
+          this.selectedRoute = route;
+          this.showModal = true;
+        }
+        break;
+      case 2:
+        if (
+          route.id == 'races' ||
+          route.id == 'classes' ||
+          route.id == 'equipment'
+        ) {
+          this.selectedRoute = route;
+          this.showModal = true;
+        }
+        break;
+      case 3:
+        if (
+          route.id == 'races' ||
+          route.id == 'classes' ||
+          route.id == 'equipment' ||
+          route.id == 'skills'
+        ) {
+          this.selectedRoute = route;
+          this.showModal = true;
+        }
+        break;
+      case 4:
+        if (
+          route.id == 'races' ||
+          route.id == 'classes' ||
+          route.id == 'equipment' ||
+          route.id == 'skills' ||
+          route.id == 'spells'
+        ) {
+          this.selectedRoute = route;
+          this.showModal = true;
+          this.filteredSpellsJson = await this.filterSpellsByClass(route.res);
+        }
+        break;
+      case 5:
+        this.selectedRoute = route;
+        this.showModal = true;
+        break;
+      default:
+        console.log('Error step');
+        break;
+    }
   }
   onModalClosed() {
     this.selectedRoute;
     this.showModal = false;
   }
 
-  onCategoriesSelected(categories: Races) {
+  onCategoriesSelected(
+    categories: Races | Classes | Equipment | Skills | Spells
+  ) {
+    const typeValue = this.selectedRoute.id;
+    (categories as any).type = typeValue;
     this.selectedCategories = categories;
     this.selectedRoute.image = categories?.index;
+
+    if (this.selectedRoute!.id === 'classes') {
+      this.selectedClasse = categories as Classes;
+    }
   }
 
   filterEquipement(result: string) {
@@ -133,8 +206,34 @@ export class CustomerComponent implements OnInit {
       }
     }
 
-    console.log(this.wapons);
     this.routesApi[1].res = JSON.stringify({ results: this.wapons });
+  }
+
+  async filterSpellsByClass(rawJson: string): Promise<string> {
+    const parsed = JSON.parse(rawJson) as {
+      results: { index: string; name: string; url: string }[];
+    };
+    const summary = parsed.results;
+
+    if (!this.selectedClasse) {
+      return rawJson;
+    }
+
+    const detailPromises = summary.map((sp) =>
+      fetch(baseUrl + sp.url)
+        .then((res) => res.json())
+        .catch(() => null)
+    );
+
+    const details = (await Promise.all(detailPromises)).filter(
+      (d): d is Spells => !!d
+    );
+
+    const filtered = details.filter((spell) =>
+      spell.classes.some((c) => c.index === this.selectedClasse!.index)
+    );
+
+    return JSON.stringify({ results: filtered });
   }
 
   async getRoutesApi(index: number) {
@@ -144,10 +243,6 @@ export class CustomerComponent implements OnInit {
       .then((res) => res.json())
       .then((result) => {
         this.routesApi[index].res = JSON.stringify(result);
-        // Chercher ou la payload est émise
-        // pour récupere et écrire les interfaces
-        // pour faire la même chose avec toute les categorie
-        console.log(this.routesApi[0].res);
       })
       .catch((err) => {
         console.log(err);

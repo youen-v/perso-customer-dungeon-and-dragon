@@ -1,0 +1,14 @@
+#contain-resume {
+  width: 23vw;
+  height: 55vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow: scroll;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

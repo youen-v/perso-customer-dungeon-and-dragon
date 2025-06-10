@@ -6,7 +6,23 @@
 }
 
 .login {
-  width: 40vw;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login button {
+  width: 30vw;
   height: 20vh;
+  font-size: 5rem;
+  border-radius: 15px;
   background-color: brown;
+  color: antiquewhite;
+  border: 1px solid rgb(39, 39, 39);
+}
+
+.login button:hover {
+  background-color: rgb(104, 23, 23);
 }

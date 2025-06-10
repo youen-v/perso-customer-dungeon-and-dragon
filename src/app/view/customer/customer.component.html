@@ -1,7 +1,7 @@
 <section class="container">
     <div class="fond-fiche-personnage">
         @for (route of routesApi; track $index) {
-            <div class="case" id="{{route.id}}" (click)="openModal(route)">
+            <div class="case" id="{{route.id}}" (click)="openModal(route, selectedStep)">
                 <img 
                     [id]="'image-'+route.id" [src]='"/assets/"+ route.id+ "/" + route.id + "-" + route.image + ".png"' 
                     [alt]="`Cliquez ici pour ajouter votre ${route.id}`" 
@@ -26,6 +26,7 @@
                           (keydown)="onNameKeydown($event)"
                           name="name"
                           autofocus
+                          maxlength="9"
                         />
                       }
                 </div>
@@ -38,12 +39,17 @@
         (closed)="onModalClosed()"
         (categoriesSelected)="onCategoriesSelected($event)"
         >
-            <app-select [dataSend]="selectedRoute.res"></app-select>
+            <app-select 
+            [dataSend]="selectedRoute.id === 'spells'
+            ? filteredSpellsJson
+            : selectedRoute.res"
+            ></app-select>
             <button (click)="onModalClosed()">Fermer</button>
         </app-modal>
         <section id="fichePersonnage">
             <app-resume
-                [payloadRaces]="selectedCategories"
+                [payloadCategories]="selectedCategories"
+                (notPrevStepSelected)="onSelectedStep($event)"
             ></app-resume>
         </section>
     </div>

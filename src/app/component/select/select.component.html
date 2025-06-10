@@ -1,4 +1,5 @@
 <label>Choisissez :</label>
+
 <select #selectElement (change)="selected.set(selectElement.value)" id="field">
     <option [defaultSelected]="" value=""></option>
     @for (data of datas; track $index) {
@@ -6,4 +7,6 @@
             {{ data.name}}
         </option>
     }
+
+    
 </select>
